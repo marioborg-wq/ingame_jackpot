@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="colors_and_type.css">
+<script type="module" src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.3/dist/dotlottie-wc.js"></script>
+<style>
+  body { margin: 0; }
+  @keyframes flapIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes cardIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes drawerUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes glowPulse { 0%, 100% { opacity: 0.35; transform: scale(0.85); } 50% { opacity: 0.75; transform: scale(1.1); } }
+  @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @keyframes sparkFloat {
+    0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+    20% { opacity: 1; }
+    55% { opacity: 1; }
+    100% { transform: translate(16px, -16px) scale(0.6); opacity: 0; }
+  }
+  @keyframes sparkFloatUp {
+    0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+    20% { opacity: 1; }
+    55% { opacity: 1; }
+    100% { transform: translate(0, -16px) scale(0.6); opacity: 0; }
+  }
+</style>
+</helmet>
+<div style="min-height: 100vh; background: var(--kto-neutral-100); display: flex; align-items: center; justify-content: center; padding: 40px 16px; font-family: var(--font-body);">
+
+  <div style="width: 393px; height: 852px; background: var(--bg); border-radius: 32px; overflow: hidden; position: relative; box-shadow: var(--sh-3); display: flex; flex-direction: column; border: 1px solid var(--kto-neutral-300);">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 4px; flex-shrink: 0;">
+      <span style="font: var(--fw-bold) 15px/1 var(--font-body); color: var(--fg);">9:41</span>
+      <div style="width: 24px; height: 12px; border: 1px solid var(--fg); border-radius: 3px;"></div>
+    </div>
+
+    <div style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: var(--bg); min-height: 0; overflow: hidden;">
+      <video src="assets/slot-game.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; object-position: center top;"></video>
+    </div>
+
+    <div style="flex-shrink: 0; background: var(--bg-elevated); position: relative; border-top: 1px solid var(--kto-neutral-200); border-bottom: 1px solid var(--kto-neutral-200); display: flex; align-items: center; gap: 12px; padding: 8px 12px; height: 50px; box-sizing: border-box;">
+      <div style="position: absolute; inset: 0; background-image: {{ tierGradientA }}; opacity: {{ gradientAOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
+      <div style="position: absolute; inset: 0; background-image: {{ tierGradientB }}; opacity: {{ gradientBOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
+
+      <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; position: relative;">
+        <sc-if value="{{ activeTier.isFire }}" hint-placeholder-val="{{ true }}">
+          <div style="position: relative; display: flex; align-items: center; height: 22px;">
+            <div style="position: absolute; left: 0; top: 0; display: flex; align-items: center; opacity: {{ activeTier.logoIntroOpacity }}; transition: opacity 550ms var(--ease-standard); pointer-events: none;">
+              <img src="assets/jackpot-logo.png" alt="KTO Jackpot" style="height: 32px; width: auto; flex-shrink: 0;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; opacity: {{ activeTier.megaContentOpacity }}; transition: opacity 550ms var(--ease-standard) {{ activeTier.megaContentDelay }};">
+            <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
+              <img src="assets/icons/jackpot-fire.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
+              <dotlottie-wc src="assets/icons/jackpot-fire.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
+            </span>
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
+            <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
+                <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
+                  <sc-if value="{{ col.isDigit }}" hint-placeholder-val="{{ true }}">
+                    <span style="display: flex; flex-direction: column; transform: translateY({{ col.offset }}); transition: transform 620ms cubic-bezier(0.3,0.8,0.3,1);">
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.prevOpacity }}; transition: opacity 620ms ease-in;">{{ col.prev }}</span>
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.currOpacity }}; transition: opacity 620ms ease-out;">{{ col.curr }}</span>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ !col.isDigit }}" hint-placeholder-val="{{ false }}">
+                    <span style="height: 16px; line-height: 16px; display: block;">{{ col.curr }}</span>
+                  </sc-if>
+                </span>
+              </sc-for></span>
+            </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ activeTier.isMajor }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 550ms var(--ease-standard); transform-origin: center;">
+            <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
+              <img src="assets/icons/jackpot-major.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
+              <dotlottie-wc src="assets/icons/jackpot-major.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
+            </span>
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
+            <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
+                <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
+                  <sc-if value="{{ col.isDigit }}" hint-placeholder-val="{{ true }}">
+                    <span style="display: flex; flex-direction: column; transform: translateY({{ col.offset }}); transition: transform 620ms cubic-bezier(0.3,0.8,0.3,1);">
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.prevOpacity }}; transition: opacity 620ms ease-in;">{{ col.prev }}</span>
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.currOpacity }}; transition: opacity 620ms ease-out;">{{ col.curr }}</span>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ !col.isDigit }}" hint-placeholder-val="{{ false }}">
+                    <span style="height: 16px; line-height: 16px; display: block;">{{ col.curr }}</span>
+                  </sc-if>
+                </span>
+              </sc-for></span>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ activeTier.isMinor }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 550ms var(--ease-standard); transform-origin: center;">
+            <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
+              <img src="assets/icons/jackpot-minor.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
+              <dotlottie-wc src="assets/icons/jackpot-minor.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
+            </span>
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
+            <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
+                <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
+                  <sc-if value="{{ col.isDigit }}" hint-placeholder-val="{{ true }}">
+                    <span style="display: flex; flex-direction: column; transform: translateY({{ col.offset }}); transition: transform 620ms cubic-bezier(0.3,0.8,0.3,1);">
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.prevOpacity }}; transition: opacity 620ms ease-in;">{{ col.prev }}</span>
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.currOpacity }}; transition: opacity 620ms ease-out;">{{ col.curr }}</span>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ !col.isDigit }}" hint-placeholder-val="{{ false }}">
+                    <span style="height: 16px; line-height: 16px; display: block;">{{ col.curr }}</span>
+                  </sc-if>
+                </span>
+              </sc-for></span>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ activeTier.isMini }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 550ms var(--ease-standard); transform-origin: center;">
+            <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
+              <img src="assets/icons/jackpot-mini.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
+              <dotlottie-wc src="assets/icons/jackpot-mini.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
+            </span>
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
+            <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
+                <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
+                  <sc-if value="{{ col.isDigit }}" hint-placeholder-val="{{ true }}">
+                    <span style="display: flex; flex-direction: column; transform: translateY({{ col.offset }}); transition: transform 620ms cubic-bezier(0.3,0.8,0.3,1);">
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.prevOpacity }}; transition: opacity 620ms ease-in;">{{ col.prev }}</span>
+                      <span style="height: 16px; line-height: 16px; opacity: {{ col.currOpacity }}; transition: opacity 620ms ease-out;">{{ col.curr }}</span>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ !col.isDigit }}" hint-placeholder-val="{{ false }}">
+                    <span style="height: 16px; line-height: 16px; display: block;">{{ col.curr }}</span>
+                  </sc-if>
+                </span>
+              </sc-for></span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ openDrawer }}" style="display: inline-flex; align-items: center; gap: 6px; background: var(--kto-neutral-300); color: var(--fg); border: 0; border-radius: var(--r-md); padding: 8px 12px; font: var(--fw-bold) 14px/1 var(--font-body); white-space: nowrap; cursor: pointer; flex-shrink: 0;">
+          R$ {{ contribFormatted }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+      </sc-if>
+      <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ openPopupFromInfo }}" style="position: relative; z-index: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 6px 4px; cursor: pointer;">
+          <span style="position: absolute; left: 97px; top: 9px; width: 4.5px; height: 4.5px; border-radius: 50%; background: #FFD98A; box-shadow: 0 0 8px 2px var(--kto-warning), 0 0 2px #fff; animation: sparkFloat 1.6s ease-in-out infinite; animation-delay: 0s;"></span>
+          <span style="position: absolute; left: 97px; top: 9px; width: 3px; height: 3px; border-radius: 50%; background: #FFF3C4; box-shadow: 0 0 6px 2px var(--kto-yellow), 0 0 2px #fff; animation: sparkFloat 1.6s ease-in-out infinite; animation-delay: 0.5s;"></span>
+          <span style="position: absolute; left: 97px; top: 9px; width: 3.5px; height: 3.5px; border-radius: 50%; background: #FFD98A; box-shadow: 0 0 7px 2px var(--kto-warning), 0 0 2px #fff; animation: sparkFloat 1.6s ease-in-out infinite; animation-delay: 1s;"></span>
+          <img src="assets/jackpot-logo.png" alt="KTO Jackpot" style="height: 30px; width: auto; position: relative; z-index: -1;">
+        </div>
+      </sc-if>
+
+      <div onClick="{{ handleBarToggleTap }}" style="display: flex; align-items: center; gap: 4px; justify-content: flex-end; flex: 1; min-width: 0; cursor: pointer;">
+        <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 20px; height: 20px; flex-shrink: 0; cursor: pointer;">
+        <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
+          <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer;">Participar</span>
+        </sc-if>
+        <img src="{{ toggleSrc }}" alt="" style="width: 32px; height: 20px; flex-shrink: 0;">
+      </div>
+    </div>
+
+    <div style="flex-shrink: 0; height: 56px; background: var(--bg); display: grid; grid-template-columns: repeat(3, 1fr); align-items: center;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+        <img src="assets/icons/exit.svg" alt="" style="width: 22px; height: 22px;">
+        <span style="font: var(--fw-bold) 11px/1 var(--font-body); color: var(--fg);">Sair</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+        <img src="assets/icons/deposit.svg" alt="" style="width: 28px; height: 28px;">
+        <span style="font: var(--fw-bold) 11px/1 var(--font-body); color: var(--fg);">Depositar</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+        <img src="assets/icons/cashback.svg" alt="" style="width: 22px; height: 22px;">
+        <span style="font: var(--fw-bold) 9px/1 var(--font-body); color: var(--kto-yellow); display: inline-flex; align-items: center; gap: 2px;">R$ 60,00
+          <svg width="6" height="6" viewBox="0 0 6 6" fill="var(--kto-green)"><polygon points="3,0 6,6 0,6"></polygon></svg>
+        </span>
+      </div>
+    </div>
+
+    <sc-if value="{{ popupOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closePopup }}" style="position: absolute; inset: 0; background: var(--bg-overlay); backdrop-filter: var(--blur-opaque); animation: fadeIn var(--dur-slow) var(--ease-standard); z-index: 5;"></div>
+      <div style="position: absolute; left: 20px; right: 19px; top: 50%; transform: translateY(-50%); max-height: 82%; background: var(--bg-elevated); border-radius: var(--r-lg); box-shadow: var(--sh-3); animation: cardIn var(--dur-base) var(--ease-standard); animation-fill-mode: backwards; z-index: 6; display: flex; flex-direction: column; overflow: hidden;">
+
+        <button onClick="{{ closePopup }}" aria-label="Fechar" style="position: absolute; top: 8px; right: 8px; background: transparent; border: 0; width: 36px; height: 36px; border-radius: 50%; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        </button>
+
+        <div style="flex: 1; overflow-y: auto; padding: 24px 24px 8px; display: flex; flex-direction: column; align-items: center; gap: 24px;">
+          <img src="assets/jackpot-game-art.png" alt="KTO Jackpot" style="width: 190px; height: auto; flex-shrink: 0;">
+
+          <div style="display: flex; flex-direction: column; gap: 16px; align-self: stretch;">
+            <span style="font: var(--fw-bold) 16px/1.35 var(--font-body); color: var(--fg); align-self: stretch;">Como participar:</span>
+
+            <div style="position: relative; display: flex; flex-direction: column; gap: 16px; align-self: stretch;">
+              <div style="position: absolute; left: 17px; top: 36px; bottom: 36px; width: 1px; background: var(--kto-yellow); opacity: 0.35;"></div>
+              <sc-for list="{{ steps }}" as="step" hint-placeholder-count="3">
+                <div style="display: flex; gap: 16px; align-items: flex-start; position: relative;">
+                  <span style="width: 36px; height: 36px; border-radius: var(--r-full); background: var(--kto-yellow); color: var(--kto-black); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font: italic var(--fw-display) 20px/1 var(--font-display);">{{ step.n }}</span>
+                  <span style="font: var(--fw-regular) 14px/1.45 var(--font-body); color: var(--fg); flex: 1; padding-top: 8px;">{{ step.text }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <a href="#" style="font: var(--fw-regular) 14px/1.45 var(--font-body); color: var(--fg-muted); text-decoration: underline; text-align: center; align-self: center;">Termos e Condições</a>
+          </div>
+        </div>
+
+        <div style="flex-shrink: 0; padding: 0 24px 20px;">
+          <div style="padding: 16px 0; display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; border-top: 0.5px solid var(--kto-neutral-300);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font: var(--fw-regular) 14px/1.4 var(--font-body); color: var(--fg); white-space: nowrap;">Participar</span>
+              <button aria-label="Alternar participação" onClick="{{ toggleOptIn }}" style="border: 0; padding: 0; cursor: pointer; flex-shrink: 0; background: transparent; line-height: 0;">
+                <img src="{{ toggleSrc }}" alt="" style="width: 32px; height: 20px; display: block;">
+              </button>
+            </div>
+            <div style="flex: 1;"></div>
+            <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
+              <span style="font: var(--fw-regular) 13px/1.4 var(--font-body); color: var(--fg-muted); white-space: nowrap; flex-shrink: 0;">Contribuição</span>
+              <button onClick="{{ openDrawer }}" style="display: inline-flex; align-items: center; gap: 4px; background: var(--kto-neutral-300); border: 0; border-radius: var(--r-md); padding: 6px 8px; cursor: pointer; height: 32px; box-sizing: border-box; flex-shrink: 0;">
+                <span style="font: var(--fw-bold) 13px/1.4 var(--font-body); color: var(--fg); white-space: nowrap;">R$ {{ contribFormatted }}</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="var(--fg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </sc-if>
+          </div>
+          <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
+            <div style="padding-top: 4px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <span style="font: var(--fw-regular) 14px/1.4 var(--font-body); color: var(--fg-muted); white-space: nowrap;">{{ selectedChance }}</span>
+              <sc-if value="{{ selectedPopular }}" hint-placeholder-val="{{ false }}">
+                <span style="font: var(--fw-bold) 9px/1 var(--font-body); color: var(--kto-black); background: {{ selectedPopularBg }}; border-radius: var(--r-full); padding: 3px 7px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap;">Popular</span>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeDrawer }}" style="position: absolute; inset: 0; background: rgba(0,0,0,0.7); animation: fadeIn var(--dur-slow) var(--ease-standard); z-index: 7;"></div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--bg-elevated); border-radius: var(--r-xl) var(--r-xl) 0 0; animation: drawerUp var(--dur-slow) var(--ease-standard); z-index: 8; display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 8px 16px 28px; box-sizing: border-box;">
+        <div style="width: 70px; height: 4px; border-radius: var(--r-full); background: var(--fg-muted); flex-shrink: 0;"></div>
+        <div style="display: flex; flex-direction: column; gap: 16px; align-self: stretch;">
+          <span style="font: var(--fw-bold) 20px/1.3 var(--font-body); color: var(--fg); align-self: stretch;">Escolher contribuição</span>
+          <div style="display: flex; flex-direction: column; align-self: stretch;">
+            <sc-for list="{{ amountOptions }}" as="opt" hint-placeholder-count="5">
+              <button onClick="{{ opt.onSelect }}" style="background: var(--bg-elevated); border-top: {{ opt.borderTop }}; border-left: 0; border-right: 0; border-bottom: 1px solid var(--kto-neutral-200); display: grid; grid-template-columns: 72px 1fr 56px 20px; gap: 8px; padding: 12px 12px; align-items: center; cursor: pointer; align-self: stretch;">
+                <span style="text-align: left; font: {{ opt.amountWeight }} 14px/1.4 var(--font-body); color: {{ opt.amountColor }};">R$ {{ opt.formatted }}</span>
+                <span style="font: var(--fw-regular) 14px/1.4 var(--font-body); color: {{ opt.chanceColor }}; white-space: nowrap; text-align: left;">{{ opt.chance }}</span>
+                <sc-if value="{{ opt.popular }}" hint-placeholder-val="{{ false }}">
+                  <span style="font: var(--fw-bold) 9px/1 var(--font-body); color: var(--kto-black); background: {{ opt.popularBg }}; border-radius: var(--r-full); padding: 3px 7px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; justify-self: end;">Popular</span>
+                </sc-if>
+                <sc-if value="{{ !opt.popular }}" hint-placeholder-val="{{ true }}">
+                  <span></span>
+                </sc-if>
+                <sc-if value="{{ opt.selected }}" hint-placeholder-val="{{ false }}">
+                  <span style="width: 20px; height: 20px; border-radius: 50%; border: 4px solid var(--kto-green); box-sizing: border-box; flex-shrink: 0; align-self: center; justify-self: end; display: block;"></span>
+                </sc-if>
+                <sc-if value="{{ !opt.selected }}" hint-placeholder-val="{{ true }}">
+                  <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--kto-neutral-400); flex-shrink: 0; align-self: center; justify-self: end; display: block;"></span>
+                </sc-if>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    optedIn: false,
+    popupOpen: false,
+    activeTierIdx: 0,
+    logoIntro: true,
+    tick: 0,
+    displayPrev: '',
+    displayCurr: '',
+    rollOffset: '-16px',
+    rollScope: 'all',
+    tierValues: { fire: 1851956, major: 851956, minor: 8340, mini: 1982 },
+    contribIdx: 2,
+    drawerOpen: false,
+    hasOptedInBefore: false,
+  };
+
+  tierMeta = {
+    fire:  { label: 'Mega',  step: [800, 4000] },
+    major: { label: 'Major', step: [400, 1800] },
+    minor: { label: 'Minor', step: [10, 60] },
+    mini:  { label: 'Mini',  step: [2, 12] },
+  };
+  tierOrder = ['fire', 'major', 'minor', 'mini'];
+  contribAmounts = [
+    { amt: 0.10, chance: '1 go at the jackpot', bars: 1 },
+    { amt: 0.20, chance: '2 goes at the jackpot', bars: 2 },
+    { amt: 0.50, chance: '3 goes at the jackpot', bars: 3 },
+    { amt: 1.00, chance: '4 goes at the jackpot', bars: 3 },
+    { amt: 2.00, chance: '5 goes at the jackpot', bars: 3 },
+  ];
+
+  componentDidMount() {
+    this.state.displayCurr = this.formatNumStr(this.state.tierValues.fire);
+    this.state.displayPrev = this.state.displayCurr;
+    this._bump = setInterval(() => {
+      const key = this.tierOrder[this.state.activeTierIdx];
+      const [lo, hi] = this.tierMeta[key].step;
+      const bumpAmt = 1 + Math.floor(Math.random() * 30);
+      const newVal = this.state.tierValues[key] + bumpAmt;
+      const tv = { ...this.state.tierValues, [key]: newVal };
+      this.rollTo(tv, this.formatNumStr(newVal), 'tail');
+    }, 1400);
+    this._tick = setInterval(() => {
+      const key = this.tierOrder[this.state.activeTierIdx];
+      const [lo, hi] = this.tierMeta[key].step;
+      const newVal = this.state.tierValues[key] + lo + Math.random() * (hi - lo);
+      const tv = { ...this.state.tierValues, [key]: newVal };
+      const nextIdx = (this.state.activeTierIdx + 1) % this.tierOrder.length;
+      const nextKey = this.tierOrder[nextIdx];
+      const nextDisplay = this.formatNumStr(tv[nextKey]);
+      const enteringFire = nextIdx === 0;
+      this.setState(s => ({
+        tierValues: tv,
+        activeTierIdx: nextIdx,
+        logoIntro: enteringFire,
+        tick: s.tick + 1,
+        displayPrev: nextDisplay,
+        displayCurr: nextDisplay,
+        rollOffset: '-16px',
+        rollScope: 'tail',
+      }));
+      if (enteringFire) {
+        clearTimeout(this._logoIntroTimer);
+        this._logoIntroTimer = setTimeout(() => this.setState({ logoIntro: false }), 1400);
+      }
+    }, 5000);
+  }
+
+  rollTo(tierValues, nextDisplay, scope) {
+    this.setState(s => ({
+      tierValues,
+      displayPrev: s.displayCurr,
+      displayCurr: nextDisplay,
+      rollScope: scope,
+      rollOffset: '0px',
+    }), () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ rollOffset: '-16px' })));
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._tick);
+    clearInterval(this._bump);
+    clearTimeout(this._logoIntroTimer);
+  }
+
+  formatBRL(n) {
+    return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+  }
+
+  formatNumStr(n) {
+    return Math.round(n).toLocaleString('pt-BR');
+  }
+
+  buildAmountColumns() {
+    const prev = this.state.displayPrev || '';
+    const curr = this.state.displayCurr || '';
+    const len = Math.max(prev.length, curr.length);
+    const p = prev.padStart(len, ' ');
+    const c = curr.padStart(len, ' ');
+    const offset = this.state.rollOffset;
+    const rolling = offset === '0px';
+    const prevOpacity = rolling ? 1 : 0;
+    const currOpacity = rolling ? 0 : 1;
+    const tailStart = len - 2;
+    return Array.from({ length: len }, (_, i) => ({
+      idx: i,
+      prev: p[i] === ' ' ? '\u00A0' : p[i],
+      curr: c[i] === ' ' ? '\u00A0' : c[i],
+      isDigit: /[0-9]/.test(c[i]) && (this.state.rollScope === 'all' || i >= tailStart),
+      offset,
+      prevOpacity,
+      currOpacity,
+    }));
+  }
+
+  openPopup = () => this.setState({ popupOpen: true });
+  handleBarToggleTap = () => {
+    if (this.state.optedIn || this.state.hasOptedInBefore) { this.toggleOptIn(); }
+    else { this.setState({ optedIn: true, hasOptedInBefore: true, popupOpen: true }); }
+  };
+  closePopup = () => this.setState({ popupOpen: false });
+  toggleOptIn = () => this.setState(s => ({ optedIn: !s.optedIn, hasOptedInBefore: s.hasOptedInBefore || !s.optedIn }));
+  openDrawer = (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ drawerOpen: true }); };
+  closeDrawer = () => this.setState({ drawerOpen: false });
+  selectAmount = (idx) => this.setState({ contribIdx: idx, drawerOpen: false });
+  openPopupFromInfo = (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openPopup(); };
+
+  renderVals() {
+    const key = this.tierOrder[this.state.activeTierIdx];
+    const meta = this.tierMeta[key];
+    const glowColors = { fire: '#FF0004', major: '#FFF700', minor: '#7300FF', mini: '#00FCFF' };
+    const gradFor = (k) => `radial-gradient(circle at 24px 46px, ${glowColors[k]}66 0%, ${glowColors[k]}22 15%, transparent 26%)`;
+    const parity = this.state.activeTierIdx % 2 === 0;
+    const tierGradientA = gradFor(parity ? key : (this.tierOrder[(this.state.activeTierIdx + this.tierOrder.length - 1) % this.tierOrder.length]));
+    const tierGradientB = gradFor(!parity ? key : (this.tierOrder[(this.state.activeTierIdx + this.tierOrder.length - 1) % this.tierOrder.length]));
+    const steps = [
+      { n: 1, text: 'Ative os jackpots e comece a contribuir automaticamente a cada rodada.' },
+      { n: 2, text: 'A cada rodada, uma pequena parte da sua aposta entra para o prêmio acumulado.' },
+      { n: 3, text: 'Os jackpots Mini, Minor, Major e Fire são sorteados aleatoriamente — qualquer rodada pode ganhar.' },
+    ];
+    return {
+      optedIn: this.state.optedIn,
+      popupOpen: this.state.popupOpen,
+      tierGradientA,
+      tierGradientB,
+      gradientAOpacity: (this.state.optedIn && this.state.logoIntro) ? 0 : (parity ? 1 : 0),
+      gradientBOpacity: (this.state.optedIn && this.state.logoIntro) ? 0 : (parity ? 0 : 1),
+      logoIntro: this.state.logoIntro,
+      activeTier: {
+        tick: this.state.tick,
+        label: meta.label,
+        logoIntro: this.state.logoIntro,
+        logoIntroOpacity: (this.state.optedIn && this.state.logoIntro) ? 1 : 0,
+        megaContentOpacity: (this.state.optedIn && this.state.logoIntro) ? 0 : 1,
+        megaContentDelay: (this.state.optedIn && this.state.logoIntro) ? '0ms' : '250ms',
+      isFire: key === 'fire',
+      isMajor: key === 'major',
+      isMinor: key === 'minor',
+        isMini: key === 'mini',
+        formatted: this.formatBRL(this.state.tierValues[key]),
+      },
+      amountColumns: this.buildAmountColumns(),
+      contribFormatted: this.contribAmounts[this.state.contribIdx].amt.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
+      toggleSrc: this.state.optedIn ? 'assets/icons/toggle-on.svg' : 'assets/icons/toggle-off.svg',
+      steps,
+      drawerOpen: this.state.drawerOpen,
+      selectedChance: this.contribAmounts[this.state.contribIdx].chance,
+      selectedPopular: this.contribAmounts[this.state.contribIdx].amt === 0.5,
+      selectedPopularBg: this.contribAmounts[this.state.contribIdx].amt === 0.5 ? 'var(--kto-green)' : 'var(--kto-white)',
+      amountOptions: this.contribAmounts.map((o, i) => ({
+        idx: i,
+        formatted: o.amt.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
+        chance: o.chance,
+        bar2Opacity: o.bars > 1 ? 1 : 0.25,
+        bar3Opacity: o.bars > 2 ? 1 : 0.25,
+        popular: o.amt === 0.5,
+        popularBg: (o.amt === 0.5 && i === this.state.contribIdx) ? 'var(--kto-green)' : 'var(--kto-white)',
+        amountColor: i === this.state.contribIdx ? 'var(--kto-green)' : 'var(--fg)',
+        amountWeight: 'var(--fw-bold)',
+        chanceColor: i === this.state.contribIdx ? 'var(--kto-green)' : 'var(--fg-muted)',
+        borderTop: i === 0 ? '0' : '2px solid var(--kto-neutral-200)',
+        selected: i === this.state.contribIdx,
+        onSelect: () => this.selectAmount(i),
+      })),
+      openPopup: this.openPopup,
+      closePopup: this.closePopup,
+      handleBarToggleTap: this.handleBarToggleTap,
+      openPopupFromInfo: this.openPopupFromInfo,
+      toggleOptIn: this.toggleOptIn,
+      openDrawer: this.openDrawer,
+      closeDrawer: this.closeDrawer,
+    };
+  }
+}
+</script>
+</body>
+</html>
