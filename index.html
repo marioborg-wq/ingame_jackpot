@@ -52,9 +52,9 @@
 
       <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; position: relative;">
         <sc-if value="{{ activeTier.isFire }}" hint-placeholder-val="{{ true }}">
-          <div style="position: relative; display: flex; align-items: center; height: 22px; animation: flapIn 750ms var(--ease-standard);">
+          <div style="position: relative; display: flex; align-items: center; height: 30px; animation: flapIn 750ms var(--ease-standard);">
             <div style="position: absolute; left: 0; top: 0; display: flex; align-items: center; opacity: {{ activeTier.logoIntroOpacity }}; transition: opacity 550ms var(--ease-standard); pointer-events: none;">
-              <img src="assets/jackpot-logo.png" alt="KTO Jackpot" style="height: 22px; width: auto; flex-shrink: 0;">
+              <img src="assets/jackpot-logo.png" alt="KTO Jackpot" style="height: 30px; width: auto; flex-shrink: 0;">
             </div>
             <div style="display: flex; align-items: center; gap: 6px; opacity: {{ activeTier.megaContentOpacity }}; transition: opacity 550ms var(--ease-standard) {{ activeTier.megaContentDelay }};">
             <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
@@ -170,7 +170,7 @@
       </sc-if>
 
       <div onClick="{{ handleBarToggleTap }}" style="display: flex; align-items: center; gap: 4px; justify-content: flex-end; flex: 1; min-width: 0; cursor: pointer;">
-        <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 20px; height: 20px; flex-shrink: 0; cursor: pointer;">
+        <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 24px; height: 24px; flex-shrink: 0; cursor: pointer;">
         <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
           <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer;">Participar</span>
         </sc-if>
@@ -225,7 +225,7 @@
 
         <div style="flex-shrink: 0; padding: 0 24px 20px;">
           <div style="padding: 16px 0; display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; border-top: 0.5px solid var(--kto-neutral-300);">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
               <span style="font: var(--fw-regular) 14px/1.4 var(--font-body); color: var(--fg); white-space: nowrap;">Participar</span>
               <button aria-label="Alternar participação" onClick="{{ toggleOptIn }}" style="border: 0; padding: 0; cursor: pointer; flex-shrink: 0; background: transparent; line-height: 0;">
                 <img src="{{ toggleSrc }}" alt="" style="width: 32px; height: 20px; display: block;">
@@ -311,11 +311,11 @@ class Component extends DCLogic {
   };
   tierOrder = ['fire', 'major', 'minor', 'mini'];
   contribAmounts = [
-    { amt: 0.10, chance: '1 go at the jackpot', bars: 1 },
-    { amt: 0.20, chance: '2 goes at the jackpot', bars: 2 },
-    { amt: 0.50, chance: '3 goes at the jackpot', bars: 3 },
-    { amt: 1.00, chance: '4 goes at the jackpot', bars: 3 },
-    { amt: 2.00, chance: '5 goes at the jackpot', bars: 3 },
+    { amt: 0.10, chance: '1 try at the jackpot', bars: 1 },
+    { amt: 0.20, chance: '2 tries at the jackpot', bars: 2 },
+    { amt: 0.50, chance: '3 tries at the jackpot', bars: 3 },
+    { amt: 1.00, chance: '4 tries at the jackpot', bars: 3 },
+    { amt: 2.00, chance: '5 tries at the jackpot', bars: 3 },
   ];
 
   componentDidMount() {
@@ -327,30 +327,56 @@ class Component extends DCLogic {
       const tv = { ...this.state.tierValues, [key]: newVal };
       this.rollTo(tv, this.formatNumStr(newVal), 'tail');
     }, 350);
-    this._tick = setInterval(() => {
-      const key = this.tierOrder[this.state.activeTierIdx];
-      const [lo, hi] = this.tierMeta[key].step;
-      const newVal = this.state.tierValues[key] + lo + Math.random() * (hi - lo);
-      const tv = { ...this.state.tierValues, [key]: newVal };
-      const nextIdx = (this.state.activeTierIdx + 1) % this.tierOrder.length;
-      const nextKey = this.tierOrder[nextIdx];
-      const nextDisplay = this.formatNumStr(tv[nextKey]);
-      const enteringFire = nextIdx === 0;
-      this.setState(s => ({
-        tierValues: tv,
-        activeTierIdx: nextIdx,
-        logoIntro: enteringFire,
-        tick: s.tick + 1,
-        displayPrev: nextDisplay,
-        displayCurr: nextDisplay,
-        rollScope: 'tail',
-      }));
-      if (enteringFire) {
-        clearTimeout(this._logoIntroTimer);
-        this._logoIntroTimer = setTimeout(() => this.setState({ logoIntro: false }), 1400);
-      }
-    }, 5000);
+    this.scheduleTick();
   }
+
+  tierDuration = (key) => key === 'fire' ? 8000 : 5000;
+
+  scheduleTick = () => {
+    clearTimeout(this._tick);
+    const key = this.tierOrder[this.state.activeTierIdx];
+    this._tick = setTimeout(this.advanceTier, this.tierDuration(key));
+  };
+
+  advanceTier = () => {
+    const key = this.tierOrder[this.state.activeTierIdx];
+    const [lo, hi] = this.tierMeta[key].step;
+    const newVal = this.state.tierValues[key] + lo + Math.random() * (hi - lo);
+    const tv = { ...this.state.tierValues, [key]: newVal };
+    const nextIdx = (this.state.activeTierIdx + 1) % this.tierOrder.length;
+    const nextKey = this.tierOrder[nextIdx];
+    const nextDisplay = this.formatNumStr(tv[nextKey]);
+    const enteringFire = nextIdx === 0;
+    this.setState(s => ({
+      tierValues: tv,
+      activeTierIdx: nextIdx,
+      logoIntro: enteringFire,
+      tick: s.tick + 1,
+      displayPrev: nextDisplay,
+      displayCurr: nextDisplay,
+      rollScope: 'tail',
+    }));
+    if (enteringFire) {
+      clearTimeout(this._logoIntroTimer);
+      this._logoIntroTimer = setTimeout(() => this.setState({ logoIntro: false }), 3000);
+    }
+    this.scheduleTick();
+  };
+
+  resetCycle = () => {
+    clearTimeout(this._tick);
+    clearTimeout(this._logoIntroTimer);
+    const nextDisplay = this.formatNumStr(this.state.tierValues.fire);
+    this.setState({
+      activeTierIdx: 0,
+      logoIntro: true,
+      displayPrev: nextDisplay,
+      displayCurr: nextDisplay,
+      rollScope: 'tail',
+    });
+    this._logoIntroTimer = setTimeout(() => this.setState({ logoIntro: false }), 3000);
+    this.scheduleTick();
+  };
 
   rollTo(tierValues, nextDisplay, scope) {
     this.setState(s => ({
@@ -363,7 +389,7 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
-    clearInterval(this._tick);
+    clearTimeout(this._tick);
     clearInterval(this._bump);
     clearTimeout(this._logoIntroTimer);
   }
@@ -406,10 +432,13 @@ class Component extends DCLogic {
   openPopup = () => this.setState({ popupOpen: true });
   handleBarToggleTap = () => {
     if (this.state.optedIn || this.state.hasOptedInBefore) { this.toggleOptIn(); }
-    else { this.setState({ optedIn: true, hasOptedInBefore: true, popupOpen: true }); }
+    else { this.setState({ optedIn: true, hasOptedInBefore: true, popupOpen: true }); this.resetCycle(); }
   };
   closePopup = () => this.setState({ popupOpen: false });
-  toggleOptIn = () => this.setState(s => ({ optedIn: !s.optedIn, hasOptedInBefore: s.hasOptedInBefore || !s.optedIn }));
+  toggleOptIn = () => {
+    this.setState(s => ({ optedIn: !s.optedIn, hasOptedInBefore: s.hasOptedInBefore || !s.optedIn }));
+    if (!this.state.optedIn) { this.resetCycle(); }
+  };
   openDrawer = (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ drawerOpen: true }); };
   closeDrawer = () => this.setState({ drawerOpen: false });
   selectAmount = (idx) => this.setState({ contribIdx: idx, drawerOpen: false });
