@@ -216,8 +216,8 @@
     </div>
 
     <sc-if value="{{ popupOpen }}" hint-placeholder-val="{{ false }}">
-      <div onClick="{{ closePopup }}" style="position: absolute; inset: 0; background: var(--bg-overlay); backdrop-filter: var(--blur-opaque); animation: fadeIn var(--dur-slow) var(--ease-standard); z-index: 5;"></div>
-      <div style="position: absolute; left: 20px; right: 19px; top: 50%; transform: translateY(-50%); max-height: 82%; background: var(--bg-elevated); border-radius: var(--r-lg); box-shadow: var(--sh-3); animation: cardIn var(--dur-base) var(--ease-standard); animation-fill-mode: backwards; z-index: 6; display: flex; flex-direction: column; overflow: hidden;">
+      <div onClick="{{ closePopup }}" style="position: absolute; inset: 0; z-index: 5;"></div>
+      <div style="position: absolute; left: 20px; right: 19px; top: 50%; transform: translateY(-50%); max-height: 82%; background: var(--bg-elevated); border-radius: var(--r-lg); animation: cardIn var(--dur-base) var(--ease-standard); animation-fill-mode: backwards; z-index: 6; display: flex; flex-direction: column; overflow: hidden;">
 
         <button onClick="{{ closePopup }}" aria-label="Fechar" style="position: absolute; top: 8px; right: 8px; background: transparent; border: 0; width: 36px; height: 36px; border-radius: 50%; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
