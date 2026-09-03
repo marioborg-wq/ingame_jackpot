@@ -55,6 +55,7 @@
     <sc-if value="{{ dropToastVisible }}" hint-placeholder-val="{{ false }}">
 <div style="position: absolute; left: 0; right: 0; bottom: 56px; z-index: 6; height: 50px; background: var(--bg-elevated); padding: 8px 12px; box-sizing: border-box; overflow: hidden; pointer-events: none; display: flex; align-items: center; justify-content: center;">
         <div style="position: absolute; inset: 0; background-image: {{ dropToastGradient }}; pointer-events: none;"></div>
+        <dotlottie-wc src="assets/icons/falling-coins.lottie" autoplay loop style="position: absolute; left: 50%; top: 0; width: 300px; height: 50px; transform: translateX(-50%); z-index: 1; pointer-events: none;"></dotlottie-wc>
         <div style="display: flex; align-items: center; justify-content: center; gap: 8px; opacity: {{ dropToastOpacity }}; transform: translateY({{ dropToastOffset }}px); transition: opacity 400ms var(--ease-standard), transform 400ms var(--ease-standard);">
           <dotlottie-wc src="assets/icons/jackpot-minor.lottie" autoplay loop style="width: 24px; height: 24px; flex-shrink: 0;"></dotlottie-wc>
           <div style="font: var(--fw-bold) 14px/1.4 var(--font-body); color: var(--kto-yellow); text-align: center;">{{ dropToastTitle }}</div>
@@ -188,7 +189,7 @@
       <div onClick="{{ handleBarToggleTap }}" style="display: flex; align-items: center; gap: 4px; justify-content: flex-end; flex: 1; min-width: 0; cursor: pointer;">
         <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 24px; height: 24px; flex-shrink: 0; cursor: pointer;">
         <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
-          <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer;">Participar</span>
+          <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer; margin-right: 10px;">Participar</span>
         </sc-if>
         <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
           <img src="assets/icons/toggle-on.svg" alt="" style="width: 32px; height: 20px; flex-shrink: 0;">
@@ -354,7 +355,7 @@ class Component extends DCLogic {
       const newVal = this.state.tierValues[key] + 1;
       const tv = { ...this.state.tierValues, [key]: newVal };
       this.rollTo(tv, this.formatNumStr(newVal), 'tail');
-    }, 350);
+    }, 1000);
     this.scheduleTick();
   }
 
@@ -488,7 +489,7 @@ class Component extends DCLogic {
       this._dropToastHide = setTimeout(() => {
         this.setState({ dropToastPhase: 'leaving' });
         this._dropToastEnd = setTimeout(() => this.setState({ dropToastPhase: 'hidden' }), 400);
-      }, 400 + 2500);
+      }, 400 + 4000);
     }, delay);
   };
 
@@ -560,7 +561,7 @@ class Component extends DCLogic {
       dropToastOpacity: this.state.dropToastPhase === 'visible' ? 1 : 0,
       dropToastOffset: this.state.dropToastPhase === 'visible' ? 0 : 12,
       dropToastTitle: `${this.state.dropToastLabel || 'Minor'} Jackpot has dropped!`,
-      dropToastGradient: 'radial-gradient(circle at 50% 100%, #7300FF66 0%, #7300FF22 15%, transparent 26%)',
+      dropToastGradient: 'radial-gradient(circle at 50% 100%, #7300FF66 0%, #7300FF22 30%, transparent 55%)',
     };
   }
 }
