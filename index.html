@@ -31,13 +31,18 @@
     55% { opacity: 1; }
     100% { transform: translate(0, -16px) scale(0.6); opacity: 0; }
   }
+  @media (max-width: 500px) {
+    .app-shell { padding: 0 !important; min-height: 100vh !important; align-items: stretch !important; }
+    .device-frame { width: 100% !important; height: 100vh !important; height: 100dvh !important; border-radius: 0 !important; box-shadow: none !important; border: none !important; }
+    .status-mock { display: none !important; }
+  }
 </style>
 </helmet>
-<div style="min-height: 100vh; background: var(--kto-neutral-100); display: flex; align-items: center; justify-content: center; padding: 40px 16px; font-family: var(--font-body);">
+<div class="app-shell" style="min-height: 100vh; background: var(--kto-neutral-100); display: flex; align-items: center; justify-content: center; padding: 40px 16px; font-family: var(--font-body);">
 
-  <div style="width: 393px; height: 852px; background: var(--bg); border-radius: 32px; overflow: hidden; position: relative; box-shadow: var(--sh-3); display: flex; flex-direction: column; border: 1px solid var(--kto-neutral-300);">
+  <div class="device-frame" style="width: 393px; height: 852px; background: var(--bg); border-radius: 32px; overflow: hidden; position: relative; box-shadow: var(--sh-3); display: flex; flex-direction: column; border: 1px solid var(--kto-neutral-300);">
 
-    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 4px; flex-shrink: 0;">
+    <div class="status-mock" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 4px; flex-shrink: 0;">
       <span style="font: var(--fw-bold) 15px/1 var(--font-body); color: var(--fg);">9:41</span>
       <div style="width: 24px; height: 12px; border: 1px solid var(--fg); border-radius: 3px;"></div>
     </div>
@@ -45,6 +50,16 @@
     <div style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: var(--bg); min-height: 0; overflow: hidden;">
       <video src="assets/slot-game.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; object-position: center top;"></video>
     </div>
+
+    <sc-if value="{{ dropToastVisible }}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; left: 0; right: 0; bottom: 56px; z-index: 6; height: 50px; background: var(--bg-elevated); padding: 8px 12px; box-sizing: border-box; overflow: hidden; pointer-events: none; display: flex; align-items: center; justify-content: center;">
+        <div style="position: absolute; inset: 0; background-image: {{ dropToastGradient }}; pointer-events: none;"></div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; opacity: {{ dropToastOpacity }}; transform: translateY({{ dropToastOffset }}px); transition: opacity 400ms var(--ease-standard), transform 400ms var(--ease-standard);">
+          <dotlottie-wc src="assets/icons/jackpot-minor.lottie" autoplay loop style="width: 24px; height: 24px; flex-shrink: 0;"></dotlottie-wc>
+          <div style="font: var(--fw-bold) 14px/1.4 var(--font-body); color: var(--kto-yellow); text-align: center;">{{ dropToastTitle }}</div>
+        </div>
+      </div>
+    </sc-if>
 
     <div style="flex-shrink: 0; background: var(--bg-elevated); position: relative; border-top: 1px solid var(--kto-neutral-200); border-bottom: 1px solid var(--kto-neutral-200); display: flex; align-items: center; gap: 12px; padding: 8px 12px; height: 50px; box-sizing: border-box;">
       <div style="position: absolute; inset: 0; background-image: {{ tierGradientA }}; opacity: {{ gradientAOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
@@ -174,7 +189,12 @@
         <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
           <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer;">Participar</span>
         </sc-if>
-        <img src="{{ toggleSrc }}" alt="" style="width: 32px; height: 20px; flex-shrink: 0;">
+        <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
+          <img src="assets/icons/toggle-on.svg" alt="" style="width: 32px; height: 20px; flex-shrink: 0;">
+        </sc-if>
+        <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
+          <img src="assets/icons/toggle-off.svg" alt="" style="width: 32px; height: 20px; flex-shrink: 0;">
+        </sc-if>
       </div>
     </div>
 
@@ -228,12 +248,17 @@
             <div style="display: flex; align-items: center; gap: 12px;">
               <span style="font: var(--fw-regular) 14px/1.4 var(--font-body); color: var(--fg); white-space: nowrap;">Participar</span>
               <button aria-label="Alternar participação" onClick="{{ toggleOptIn }}" style="border: 0; padding: 0; cursor: pointer; flex-shrink: 0; background: transparent; line-height: 0;">
-                <img src="{{ toggleSrc }}" alt="" style="width: 32px; height: 20px; display: block;">
+                <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
+                  <img src="assets/icons/toggle-on.svg" alt="" style="width: 32px; height: 20px; display: block;">
+                </sc-if>
+                <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
+                  <img src="assets/icons/toggle-off.svg" alt="" style="width: 32px; height: 20px; display: block;">
+                </sc-if>
               </button>
             </div>
             <div style="flex: 1;"></div>
             <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
-              <span style="font: var(--fw-regular) 13px/1.4 var(--font-body); color: var(--fg-muted); white-space: nowrap; flex-shrink: 0;">Contribuição</span>
+              
               <button onClick="{{ openDrawer }}" style="display: inline-flex; align-items: center; gap: 4px; background: var(--kto-neutral-300); border: 0; border-radius: var(--r-md); padding: 6px 8px; cursor: pointer; height: 32px; box-sizing: border-box; flex-shrink: 0;">
                 <span style="font: var(--fw-bold) 13px/1.4 var(--font-body); color: var(--fg); white-space: nowrap;">R$ {{ contribFormatted }}</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="var(--fg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -301,13 +326,14 @@ class Component extends DCLogic {
     contribIdx: 2,
     drawerOpen: false,
     hasOptedInBefore: false,
+    dropToastPhase: 'hidden',
   };
 
   tierMeta = {
-    fire:  { label: 'Mega',  step: [800, 4000] },
-    major: { label: 'Major', step: [400, 1800] },
-    minor: { label: 'Minor', step: [10, 60] },
-    mini:  { label: 'Mini',  step: [2, 12] },
+    fire:  { label: 'Mega',  step: [800, 4000], lottie: 'jackpot-fire.lottie' },
+    major: { label: 'Major', step: [400, 1800], lottie: 'jackpot-major.lottie' },
+    minor: { label: 'Minor', step: [10, 60], lottie: 'jackpot-minor.lottie' },
+    mini:  { label: 'Mini',  step: [2, 12], lottie: 'jackpot-mini.lottie' },
   };
   tierOrder = ['fire', 'major', 'minor', 'mini'];
   contribAmounts = [
@@ -321,6 +347,7 @@ class Component extends DCLogic {
   componentDidMount() {
     this.state.displayCurr = this.formatNumStr(this.state.tierValues.fire);
     this.state.displayPrev = this.state.displayCurr;
+    this.scheduleDropToast(20000);
     this._bump = setInterval(() => {
       const key = this.tierOrder[this.state.activeTierIdx];
       const newVal = this.state.tierValues[key] + 1;
@@ -444,6 +471,26 @@ class Component extends DCLogic {
   selectAmount = (idx) => this.setState({ contribIdx: idx, drawerOpen: false });
   openPopupFromInfo = (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openPopup(); };
 
+  scheduleDropToast = (delay) => {
+    clearTimeout(this._dropToastShow);
+    this._dropToastShow = setTimeout(() => {
+      const key = 'minor';
+      this.setState(s => ({
+        dropToastPhase: 'entering',
+        dropToastLabel: this.tierMeta[key].label,
+        dropToastAmountStr: this.formatBRL(s.tierValues[key]),
+        dropToastLottie: this.tierMeta[key].lottie,
+        tierValues: { ...s.tierValues, [key]: 100 },
+      }));
+      requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ dropToastPhase: 'visible' })));
+      clearTimeout(this._dropToastHide);
+      this._dropToastHide = setTimeout(() => {
+        this.setState({ dropToastPhase: 'leaving' });
+        this._dropToastEnd = setTimeout(() => this.setState({ dropToastPhase: 'hidden' }), 400);
+      }, 400 + 2500);
+    }, delay);
+  };
+
   renderVals() {
     const key = this.tierOrder[this.state.activeTierIdx];
     const meta = this.tierMeta[key];
@@ -508,6 +555,11 @@ class Component extends DCLogic {
       toggleOptIn: this.toggleOptIn,
       openDrawer: this.openDrawer,
       closeDrawer: this.closeDrawer,
+      dropToastVisible: this.state.dropToastPhase !== 'hidden',
+      dropToastOpacity: this.state.dropToastPhase === 'visible' ? 1 : 0,
+      dropToastOffset: this.state.dropToastPhase === 'visible' ? 0 : 12,
+      dropToastTitle: `${this.state.dropToastLabel || 'Minor'} Jackpot has dropped!`,
+      dropToastGradient: 'radial-gradient(circle at 50% 100%, #7300FF66 0%, #7300FF22 15%, transparent 26%)',
     };
   }
 }
