@@ -489,7 +489,7 @@ class Component extends DCLogic {
       this._dropToastHide = setTimeout(() => {
         this.setState({ dropToastPhase: 'leaving' });
         this._dropToastEnd = setTimeout(() => this.setState({ dropToastPhase: 'hidden' }), 400);
-      }, 400 + 4000);
+      }, 400 + 3000);
     }, delay);
   };
 
