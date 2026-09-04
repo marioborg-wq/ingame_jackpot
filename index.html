@@ -17,6 +17,8 @@
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes cardIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes drawerUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes drawerDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
   @keyframes glowPulse { 0%, 100% { opacity: 0.35; transform: scale(0.85); } 50% { opacity: 0.75; transform: scale(1.1); } }
   @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
   @keyframes digitRoll { from { transform: translateY(0); } to { transform: translateY(-16px); } }
@@ -67,9 +69,9 @@
       <div style="position: absolute; inset: 0; background-image: {{ tierGradientA }}; opacity: {{ gradientAOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
       <div style="position: absolute; inset: 0; background-image: {{ tierGradientB }}; opacity: {{ gradientBOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
 
-      <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; position: relative;">
+      <div style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; position: relative;">
         <sc-if value="{{ activeTier.isFire }}" hint-placeholder-val="{{ true }}">
-          <div style="position: relative; display: flex; align-items: center; height: 30px; animation: flapIn 750ms var(--ease-standard);">
+          <div style="position: relative; display: flex; align-items: center; height: 30px; animation: flapIn 750ms var(--ease-standard); margin-top: 3px;">
             <div style="position: absolute; left: 0; top: 0; display: flex; align-items: center; opacity: {{ activeTier.logoIntroOpacity }}; transition: opacity 550ms var(--ease-standard); pointer-events: none;">
               <img src="assets/jackpot-logo.png" alt="KTO Jackpot" style="height: 30px; width: auto; flex-shrink: 0;">
             </div>
@@ -78,7 +80,7 @@
               <img src="assets/icons/jackpot-fire.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-fire.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 1px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -98,12 +100,12 @@
           </div>
         </sc-if>
         <sc-if value="{{ activeTier.isMajor }}" hint-placeholder-val="{{ false }}">
-          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 750ms var(--ease-standard); transform-origin: center;">
+          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 750ms var(--ease-standard); transform-origin: center; margin-top: 3px;">
             <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
               <img src="assets/icons/jackpot-major.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-major.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 1px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -122,12 +124,12 @@
           </div>
         </sc-if>
         <sc-if value="{{ activeTier.isMinor }}" hint-placeholder-val="{{ false }}">
-          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 750ms var(--ease-standard); transform-origin: center;">
+          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 750ms var(--ease-standard); transform-origin: center; margin-top: 3px;">
             <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
               <img src="assets/icons/jackpot-minor.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-minor.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 1px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -146,12 +148,12 @@
           </div>
         </sc-if>
         <sc-if value="{{ activeTier.isMini }}" hint-placeholder-val="{{ false }}">
-          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 750ms var(--ease-standard); transform-origin: center;">
+          <div style="display: flex; align-items: center; gap: 6px; animation: flapIn 750ms var(--ease-standard); transform-origin: center; margin-top: 3px;">
             <span style="position: relative; width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;">
               <img src="assets/icons/jackpot-mini.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-mini.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 1px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -172,24 +174,26 @@
       </div>
 
       <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
-        <button onClick="{{ openDrawer }}" style="display: inline-flex; align-items: center; gap: 6px; background: var(--kto-neutral-300); color: var(--fg); border: 0; border-radius: var(--r-md); padding: 8px 12px; font: var(--fw-bold) 14px/1 var(--font-body); white-space: nowrap; cursor: pointer; flex-shrink: 0;">
+        <button onClick="{{ openDrawer }}" style="display: inline-flex; align-items: center; gap: 6px; background: var(--kto-neutral-300); color: var(--fg); border: 0; border-radius: var(--r-md); padding: 8px 8px 8px 12px; font: var(--fw-bold) 14px/1 var(--font-body); white-space: nowrap; cursor: pointer; flex-shrink: 0;">
           R$ {{ contribFormatted }}
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </button>
       </sc-if>
       <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
         <div onClick="{{ openPopupFromInfo }}" style="position: relative; z-index: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 6px 4px; cursor: pointer;">
-          <span style="position: absolute; left: 97px; top: 9px; width: 4.5px; height: 4.5px; border-radius: 50%; background: #FFD98A; box-shadow: 0 0 8px 2px var(--kto-warning), 0 0 2px #fff; animation: sparkFloat 1.6s ease-in-out infinite; animation-delay: 0s;"></span>
-          <span style="position: absolute; left: 97px; top: 9px; width: 3px; height: 3px; border-radius: 50%; background: #FFF3C4; box-shadow: 0 0 6px 2px var(--kto-yellow), 0 0 2px #fff; animation: sparkFloat 1.6s ease-in-out infinite; animation-delay: 0.5s;"></span>
-          <span style="position: absolute; left: 97px; top: 9px; width: 3.5px; height: 3.5px; border-radius: 50%; background: #FFD98A; box-shadow: 0 0 7px 2px var(--kto-warning), 0 0 2px #fff; animation: sparkFloat 1.6s ease-in-out infinite; animation-delay: 1s;"></span>
-          <img src="assets/jackpot-logo.png" alt="KTO Jackpot" style="height: 30px; width: auto; position: relative; z-index: -1;">
+          <dotlottie-wc src="assets/icons/jackpot-logo-fire.lottie" autoplay loop style="height: 35px; width: 120px; flex-shrink: 0;"></dotlottie-wc>
         </div>
       </sc-if>
 
       <div onClick="{{ handleBarToggleTap }}" style="display: flex; align-items: center; gap: 4px; justify-content: flex-end; flex: 1; min-width: 0; cursor: pointer;">
-        <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 24px; height: 24px; flex-shrink: 0; cursor: pointer;">
+        <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
+          <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 24px; height: 24px; flex-shrink: 0; cursor: pointer; margin-right: 8px;">
+        </sc-if>
         <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
-          <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer; margin-right: 10px;">Participar</span>
+          <img src="assets/icons/participation-info.svg" alt="" onClick="{{ openPopupFromInfo }}" style="width: 18px; height: 18px; flex-shrink: 0; cursor: pointer;">
+        </sc-if>
+        <sc-if value="{{ !optedIn }}" hint-placeholder-val="{{ true }}">
+          <span onClick="{{ openPopupFromInfo }}" style="font: var(--fw-regular) 12px/1.45 var(--font-body); color: var(--fg); white-space: nowrap; cursor: pointer; margin-right: 4px;">Participar</span>
         </sc-if>
         <sc-if value="{{ optedIn }}" hint-placeholder-val="{{ false }}">
           <img src="assets/icons/toggle-on.svg" alt="" style="width: 32px; height: 20px; flex-shrink: 0;">
@@ -280,8 +284,8 @@
     </sc-if>
 
     <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
-      <div onClick="{{ closeDrawer }}" style="position: absolute; inset: 0; background: rgba(0,0,0,0.7); animation: fadeIn var(--dur-slow) var(--ease-standard); z-index: 7;"></div>
-      <div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--bg-elevated); border-radius: var(--r-xl) var(--r-xl) 0 0; animation: drawerUp var(--dur-slow) var(--ease-standard); z-index: 8; display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 8px 16px 28px; box-sizing: border-box;">
+      <div onClick="{{ closeDrawer }}" style="position: absolute; inset: 0; background: rgba(0,0,0,0.7); animation: {{ scrimAnim }}; z-index: 7;"></div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--bg-elevated); border-radius: var(--r-xl) var(--r-xl) 0 0; animation: {{ drawerAnim }}; z-index: 8; display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 8px 16px 28px; box-sizing: border-box;">
         <div style="width: 70px; height: 4px; border-radius: var(--r-full); background: var(--fg-muted); flex-shrink: 0;"></div>
         <div style="display: flex; flex-direction: column; gap: 16px; align-self: stretch;">
           <span style="font: var(--fw-bold) 20px/1.3 var(--font-body); color: var(--fg); align-self: stretch;">Escolher contribuição</span>
@@ -324,7 +328,7 @@ class Component extends DCLogic {
     displayCurr: '',
     rollScope: 'all',
     bumpTick: 0,
-    tierValues: { fire: 1851956, major: 851956, minor: 8340, mini: 1982 },
+    tierValues: { fire: 10231390, major: 851956, minor: 8340, mini: 1982 },
     contribIdx: 2,
     drawerOpen: false,
     hasOptedInBefore: false,
@@ -420,6 +424,8 @@ class Component extends DCLogic {
   componentWillUnmount() {
     clearTimeout(this._tick);
     clearInterval(this._bump);
+    clearTimeout(this._drawerCloseTimer);
+    clearTimeout(this._drawerCloseAnimTimer);
     clearTimeout(this._logoIntroTimer);
   }
 
@@ -469,8 +475,16 @@ class Component extends DCLogic {
     if (!this.state.optedIn) { this.resetCycle(); }
   };
   openDrawer = (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ drawerOpen: true }); };
-  closeDrawer = () => this.setState({ drawerOpen: false });
-  selectAmount = (idx) => this.setState({ contribIdx: idx, drawerOpen: false });
+  closeDrawer = () => {
+    this.setState({ drawerClosing: true });
+    clearTimeout(this._drawerCloseAnimTimer);
+    this._drawerCloseAnimTimer = setTimeout(() => this.setState({ drawerOpen: false, drawerClosing: false }), 280);
+  };
+  selectAmount = (idx) => {
+    this.setState({ contribIdx: idx });
+    clearTimeout(this._drawerCloseTimer);
+    this._drawerCloseTimer = setTimeout(() => this.closeDrawer(), 1000);
+  };
   openPopupFromInfo = (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openPopup(); };
 
   scheduleDropToast = (delay) => {
@@ -532,6 +546,8 @@ class Component extends DCLogic {
       toggleSrc: this.state.optedIn ? 'assets/icons/toggle-on.svg' : 'assets/icons/toggle-off.svg',
       steps,
       drawerOpen: this.state.drawerOpen,
+      scrimAnim: this.state.drawerClosing ? 'fadeOut var(--dur-slow) var(--ease-standard) forwards' : 'fadeIn var(--dur-slow) var(--ease-standard)',
+      drawerAnim: this.state.drawerClosing ? 'drawerDown var(--dur-slow) var(--ease-standard) forwards' : 'drawerUp var(--dur-slow) var(--ease-standard)',
       selectedChance: this.contribAmounts[this.state.contribIdx].chance,
       selectedPopular: this.contribAmounts[this.state.contribIdx].amt === 0.5,
       selectedPopularBg: this.contribAmounts[this.state.contribIdx].amt === 0.5 ? 'var(--kto-green)' : 'var(--kto-white)',
