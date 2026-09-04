@@ -69,7 +69,7 @@
       <div style="position: absolute; inset: 0; background-image: {{ tierGradientA }}; opacity: {{ gradientAOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
       <div style="position: absolute; inset: 0; background-image: {{ tierGradientB }}; opacity: {{ gradientBOpacity }}; transition: opacity 900ms var(--ease-standard); pointer-events: none;"></div>
 
-      <div style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; position: relative;">
+      <div style="display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; position: relative;">
         <sc-if value="{{ activeTier.isFire }}" hint-placeholder-val="{{ true }}">
           <div style="position: relative; display: flex; align-items: center; height: 30px; animation: flapIn 750ms var(--ease-standard); margin-top: 3px;">
             <div style="position: absolute; left: 0; top: 0; display: flex; align-items: center; opacity: {{ activeTier.logoIntroOpacity }}; transition: opacity 550ms var(--ease-standard); pointer-events: none;">
@@ -80,7 +80,7 @@
               <img src="assets/icons/jackpot-fire.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-fire.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -105,7 +105,7 @@
               <img src="assets/icons/jackpot-major.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-major.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -129,7 +129,7 @@
               <img src="assets/icons/jackpot-minor.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-minor.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
@@ -153,7 +153,7 @@
               <img src="assets/icons/jackpot-mini.svg" alt="" style="width: 22px; height: 22px; position: relative; z-index: 1; display: none;">
               <dotlottie-wc src="assets/icons/jackpot-mini.lottie" autoplay loop style="width: 22px; height: 22px; position: relative; z-index: 1;"></dotlottie-wc>
             </span>
-            <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
               <span style="font: var(--fw-bold) 10px/12px var(--font-body); color: var(--kto-yellow); text-transform: uppercase; white-space: nowrap;">{{ activeTier.label }}</span>
             <span style="font: var(--fw-bold) 14px/16px var(--font-body); color: var(--fg); white-space: nowrap; display: inline-flex; align-items: flex-end; margin-left: 0px;">R$&nbsp;<sc-for list="{{ amountColumns }}" as="col" hint-placeholder-count="7">
                 <span style="display: inline-block; position: relative; height: 16px; overflow: hidden;">
